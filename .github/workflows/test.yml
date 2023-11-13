@@ -31,7 +31,7 @@ jobs:
     - run: npm test
     - name: Run coveralls
       env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
       run: npm run test:coveralls
     - name: Coveralls Parallel
       uses: coverallsapp/github-action@master
