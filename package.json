@@ -5,8 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "jest",
+    "test": "jest --verbose --collectCoverage",
     "test:dev": "jest --watchAll --verbose",
+    "test:coverage": "jest --watchAll --verbose --collectCoverage",
     "test:coveralls": "jest --coverage && coveralls < coverage/lcov.info"
   },
   "author": "Khoa Nguyen & An Nguyen",

@@ -10,4 +10,7 @@ describe("map.js", () => {
   it("should apply mapping function over the array", () => {
     expect(map(INPUT, square)).toStrictEqual([4, 9, 16, 25]);
   });
+  it("should returns empty array when not given an array", () => {
+    expect(map(null, square)).toStrictEqual([]);
+  })
 });
