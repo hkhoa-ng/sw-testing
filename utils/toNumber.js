@@ -53,6 +53,7 @@ function toNumber(value) {
     value = isObject(other) ? `${other}` : other
   }
   if (typeof value !== 'string') {
+    // value === 0 never happens
     return value === 0 ? value : +value
   }
   value = value.replace(reTrim, '')
