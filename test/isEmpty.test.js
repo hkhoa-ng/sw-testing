@@ -152,6 +152,12 @@ describe('isEmpty', () => {
             Object.defineProperty(obj, 'a', { value: 1, enumerable: false });
             expect(isEmpty(obj)).toBe(true);
         });
+
+          test('Checks if value is a prototype object', () => {
+            function TestObject(){}
+            const result = isEmpty(TestObject.prototype);
+            expect(result).toBe(true);
+        });
     });
 
     describe('Scenario Specific Tests', () => {
