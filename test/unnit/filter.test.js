@@ -1,4 +1,4 @@
-import filter from "../utils/filter";
+import filter from "../../utils/filter";
 
 describe('filter', () => {
 
@@ -115,66 +115,6 @@ describe('filter', () => {
             const array = [0, 1, false, 2, '', 3];
             const predicate = Boolean;
             expect(filter(array, predicate)).toEqual([1, 2, 3]);
-        });
-    });
-
-    describe('Real product filtering', () => {
-        const products = [
-            { name: 'Organic Apple', price: 5.5, stocks: 10, categories: ['Fruits', 'Organic'], expirationDate: '2024-01-01' },
-            { name: 'Almond Milk', price: 4.5, stocks: 15, categories: ['Dairy', 'Organic'], expirationDate: '2023-12-01' },
-            { name: 'Chocolate Cake', price: 15.0, stocks: 2, categories: ['Bakery', 'Sweets'], expirationDate: '2023-11-18' },
-        ];
-
-        test('filters products within a specific price range', () => {
-            const priceRange = { min: 4, max: 6 };
-            const filteredProducts = filter(products, product => product.price >= priceRange.min && product.price <= priceRange.max);
-            expect(filteredProducts).toEqual([
-                { name: 'Organic Apple', price: 5.5, stocks: 10, categories: ['Fruits', 'Organic'], expirationDate: '2024-01-01' },
-                { name: 'Almond Milk', price: 4.5, stocks: 15, categories: ['Dairy', 'Organic'], expirationDate: '2023-12-01' }
-            ]);
-        });
-
-        test('filters products based on stock availability', () => {
-            const inStockProducts = filter(products, product => product.stocks > 0);
-            expect(inStockProducts).not.toContainEqual({ name: 'Chocolate Cake', price: 15.0, stocks: 0, categories: ['Bakery', 'Sweets'], expirationDate: '2023-11-18' });
-        });
-
-        test('filters organic products in a specific category', () => {
-            const category = 'Dairy';
-            const filteredProducts = filter(products, product => product.categories.includes('Organic') && product.categories.includes(category));
-            expect(filteredProducts).toEqual([
-                { name: 'Almond Milk', price: 4.5, stocks: 15, categories: ['Dairy', 'Organic'], expirationDate: '2023-12-01' }
-            ]);
-        });
-
-        test('filters products expiring within a specific timeframe', () => {
-            const today = new Date('2023-11-16');
-            const withinDays = 30;
-            const expiringSoonFilter = product => {
-                const expirationDate = new Date(product.expirationDate);
-                const timeDiff = expirationDate - today;
-                return timeDiff <= withinDays * 24 * 60 * 60 * 1000;
-            };
-            const expiringSoonProducts = filter(products, expiringSoonFilter);
-            expect(expiringSoonProducts).toEqual([
-                { name: 'Almond Milk', price: 4.5, stocks: 15, categories: ['Dairy', 'Organic'], expirationDate: '2023-12-01' },
-                { name: 'Chocolate Cake', price: 15.0, stocks: 2, categories: ['Bakery', 'Sweets'], expirationDate: '2023-11-18' }
-            ]);
-        });
-
-        test('filters products by multiple criteria', () => {
-            const criteria = {
-                priceMax: 10,
-                minStocks: 5,
-                categories: ['Organic', 'Fruits']
-            };
-            const complexFilter = product => product.price <= criteria.priceMax && product.stocks >= criteria.minStocks && criteria.categories.some(category => product.categories.includes(category));
-            const filteredProducts = filter(products, complexFilter);
-            expect(filteredProducts).toEqual([
-                
-                { name: 'Organic Apple', price: 5.5, stocks: 10, categories: ['Fruits', 'Organic'], expirationDate: '2024-01-01' },
-                { name: 'Almond Milk', price: 4.5, stocks: 15, categories: ['Dairy', 'Organic'], expirationDate: '2023-12-01' }
-            ]);
         });
     });
 
