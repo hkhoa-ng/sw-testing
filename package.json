@@ -5,10 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "jest --verbose --collectCoverage",
+    "test": "jest --collectCoverage",
     "test:dev": "jest --watchAll --verbose",
     "test:coverage": "jest --watchAll --verbose --collectCoverage",
-    "test:coveralls": "jest --coverage && coveralls < coverage/lcov.info"
+    "test:coveralls": "jest --collectCoverage && coveralls < coverage/lcov.info"
   },
   "author": "Khoa Nguyen & An Nguyen",
   "license": "MIT",
@@ -19,5 +19,11 @@
     "babel-jest": "^29.7.0",
     "coveralls": "^3.1.1",
     "jest": "^29.7.0"
+  },
+  "jest": {
+    "testMatch": [
+      "**/test/unit/**/*.js",
+      "**/test/integration/**/*.js"
+    ]
   }
 }
