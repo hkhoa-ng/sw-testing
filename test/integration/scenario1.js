@@ -1,15 +1,15 @@
 import { browseProductCatalog, searchProduct, filterSearchResults, addToCart, interactWithCart, checkout, makePayment, confirmOrderPlacement } from "../../utils/functionalties/scenario1";
-
+import { mockProducts } from "./mock/products";
 describe('Scenario 1 test', () => {
-  const products = [
-    { id: 1, name: 'Product A', category: 'Category 1', price: 10.99, description: 'Description A' },
-    { id: 2, name: 'Product B', category: 'Category 2', price: 20.99, description: 'Description B' },
-
-  ];
+    let products = mockProducts;
+  beforeEach(()=>{
+    // reset product to avoid modification
+    products = mockProducts;
+  })
 
   describe('Test browseProductCatalog function', () => {
     test('empty products array', () => {
-        const category = 'Category 1';
+        const category = 'Dairy';
         const emptyProducts = [];
         const result = browseProductCatalog(emptyProducts, category);
         expect(result).toEqual([]);
@@ -22,10 +22,25 @@ describe('Scenario 1 test', () => {
     });
 
     test('multiple products in the same category', () => {
-        const category = 'Category 2';
+        const category = 'Dairy';
         const result = browseProductCatalog(products, category);
         expect(result).toEqual([
-            { name: 'Product B', description: 'Description B', price: 20.99 },
+            {
+                id: 3,
+                name: 'Milk',
+                category: ['Dairy', 'Beverages'],
+                price: 1.49,
+                description: 'Fresh and nutritious milk',
+                quantity: 100
+              },
+              {
+                id: 4,
+                name: 'Yogurt',
+                category: ['Dairy', 'Snacks'],
+                price: 2.29,
+                description: 'Smooth and creamy yogurt',
+                quantity: 89
+              }
         ]);
     });
 
@@ -36,7 +51,7 @@ describe('Scenario 1 test', () => {
     });
 
     test('null products array', () => {
-        const category = 'Category 1';
+        const category = 'Snacks';
         const nullProducts = null;
         const result = browseProductCatalog(nullProducts, category);
         expect(result).toEqual([]);
@@ -45,12 +60,26 @@ describe('Scenario 1 test', () => {
 
   describe('Test searchProduct function', () => {
     test('existing search key', () => {
-    const searchKey = 'Product';
+    const searchKey = 'aPple';
     const result = searchProduct(products, searchKey);
     expect(result).toEqual([
-        { name: 'Product A', description: 'Description A', price: 10.99 },
-        { name: 'Product B', description: 'Description B', price: 20.99 },
-    ]);
+            {
+                id: 2,
+                name: 'Apple',
+                category: ['Fruit', 'Pomace fruits'],
+                price: 2.99,
+                description: 'Crisp and delicious apple',
+                quantity: 1325
+            },
+            {
+                id: 8,
+                name: 'Apple Juice',
+                category: ['Fruit juices', 'Beverages'],
+                price: 1.99,
+                description: '100% pure apple juice',
+                quantity: 87
+            },
+        ]);
     });
 
     test('non-existent search key', () => {
@@ -73,7 +102,7 @@ describe('Scenario 1 test', () => {
     });
 
     test('null products array', () => {
-        const searchKey = 'Product';
+        const searchKey = 'apple';
         const nullProducts = null;
         const result = searchProduct(nullProducts, searchKey);
         expect(result).toEqual([]);
@@ -82,32 +111,91 @@ describe('Scenario 1 test', () => {
 
   describe('Test filterSearchResults function', () => {
     test('minimum price filter', () => {
-        const filterOptions = { minPrice: 15 };
+        const filterOptions = { minPrice: 2.6 };
         const result = filterSearchResults(products, filterOptions);
         expect(result).toEqual([
-            { name: 'Product B', description: 'Description B', price: 20.99 },
+            {
+                id: 2,
+                name: 'Apple',
+                category: ['Fruit', 'Pomace fruits'],
+                price: 2.99,
+                description: 'Crisp and delicious apple',
+                quantity: 1325
+            },
+            {
+                id: 5,
+                name: 'Coffee',
+                category: ['Beverages', 'Hot drinks'],
+                price: 4.99,
+                description: 'Freshly roasted coffee beans',
+                quantity: 60
+            },
+            {
+                id: 6,
+                name: 'Bread',
+                category: ['Bakery', 'Grains'],
+                price: 2.79,
+                description: 'Freshly baked bread',
+                quantity: 2723
+            },
+            {
+                id: 10,
+                name: 'Salad',
+                category: ['Vegetables', 'Fruit', 'Greens'],
+                price: 3.99,
+                description: 'A mix of fresh vegetables and fruits',
+                quantity: 108
+            }
         ]);
     });
 
     test('category filter', () => {
-        const filterOptions = { category: 'Category 1' };
+        const filterOptions = { category: ['Fruit'] };
         const result = filterSearchResults(products, filterOptions);
         expect(result).toEqual([
-            { name: 'Product A', description: 'Description A', price: 10.99 },
+            {
+                id: 1,
+                name: 'Orange',
+                category: ['Fruit', 'Citrus'],
+                price: 2.49,
+                description: 'Fresh and juicy oranges',
+                quantity: 509
+            },
+            {
+                id: 2,
+                name: 'Apple',
+                category: ['Fruit', 'Pomace fruits'],
+                price: 2.99,
+                description: 'Crisp and delicious apple',
+                quantity: 1325
+            },
+            {
+                id: 8,
+                name: 'Apple Juice',
+                category: ['Fruit juices', 'Beverages'],
+                price: 1.99,
+                description: '100% pure apple juice',
+                quantity: 4592
+            },
+            {
+                id: 10,
+                name: 'Salad',
+                category: ['Vegetables', 'Fruit', 'Greens'],
+                price: 3.99,
+                description: 'A mix of fresh vegetables and fruits',
+                quantity: 108
+            },
         ]);
     });
 
     test('empty filter options', () => {
         const filterOptions = {};
         const result = filterSearchResults(products, filterOptions);
-        expect(result).toEqual([
-            { name: 'Product A', description: 'Description A', price: 10.99 },
-            { name: 'Product B', description: 'Description B', price: 20.99 },
-    ]);
-    });
+        expect(result).toEqual(products);
+  });
 
     test('undefined products array', () => {
-        const filterOptions = { minPrice: 15 };
+        const filterOptions = { minPrice: 1 };
         const undefinedProducts = undefined;
         const result = filterSearchResults(undefinedProducts, filterOptions);
         expect(result).toEqual([]);
@@ -116,25 +204,23 @@ describe('Scenario 1 test', () => {
     test('null filter options', () => {
         const nullFilterOptions = null;
         const result = filterSearchResults(products, nullFilterOptions);
-        expect(result).toEqual([
-            { name: 'Product A', description: 'Description A', price: 10.99 },
-            { name: 'Product B', description: 'Description B', price: 20.99 },
-        ]);
+        expect(result).toEqual(products);
     });
   });
 
   describe('Test addToCart function', () => {
     test('Adding a new product to an empty cart', () => {
-        const selectedProducts = [{ id: 1, name: 'Product A', price: 10.99 }];
+        const selectedProducts = [{ id: 11, name: 'Product A', price: 10.99, category:['Beverages', 'Vegetables'] }];
         const shoppingCart = [];
         const updatedCart = addToCart(selectedProducts, shoppingCart);
         expect(updatedCart).toEqual([
-        {
-            id: 1,
-            name: 'Product A',
-            price: 10.99,
-            quantity: 1,
-        },
+            {
+                id: 1,
+                name: 'Product A',
+                price: 10.99,
+                quantity: 1,
+                category:['Beverages', 'Vegetables']
+            },
         ]);
     });
 

@@ -8,7 +8,7 @@ import isDate from "../isDate";
 import isArrayLikeObject from "../isArrayLikeObject";
 
 // Step 1: Producer signs into the e-commerce store
-export function producerLogin(email, password) {
+export function producerLogin(email, password, producerCredentials) {
   if (!email || !password) {
     return { success: false, message: 'Invalid credentials' };
   }
@@ -40,19 +40,18 @@ export function addNewProduct(productInfo, productsDatabase) {
   const productWithQuantity = add(filledProduct, { quantity: 1 });
   productsDatabase.push(productWithQuantity);
 
-  return { success: true, message: 'Product added successfully.' };
+  return { 
+    success: true, 
+    message: 'Product added successfully.',
+    productsDatabase
+  };
 }
 
 // Step 3: Request transmission
-export function requestTransmission(productData) {
+export function requestTransmission(productData, existingCategories) {
   try {
     const { name, description, category, price } = productData;
-    const validatedData = {
-      name: capitalize(name),
-      description,
-      category,
-      price: toNumber(price),
-    };
+    const validatedData = words(description).includes(name.toLowerCase()) && eq(filter(category, c=>existingCategories.includes(c)).length, category.length);
 
     if (validatedData) {
       // storeProductInDatabase(validatedData);
@@ -80,8 +79,8 @@ export function validateProductInfo(productInfo) {
       return { valid: false, message: 'Invalid createdDate format.' };
     }
 
-    if (!isArrayLikeObject(productInfo.images)) {
-      return { valid: false, message: 'Images should be an array-like object.' };
+    if (!isArrayLikeObject(category)) {
+      return { valid: false, message: 'Categories should be an array-like object.' };
     }
 
     return { valid: true, message: 'Product information is valid.' };
