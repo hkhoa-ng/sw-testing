@@ -1,10 +1,13 @@
 import { browseProductCatalog, searchProduct, filterSearchResults, addToCart, interactWithCart, checkout, makePayment, confirmOrderPlacement } from "../../utils/functionalties/scenario1";
 import { mockProducts } from "./mock/products";
+import { mockCart } from "./mock/productCart";
 describe('Scenario 1 test', () => {
     let products = mockProducts;
+    let cart = mockCart;
   beforeEach(()=>{
     // reset product to avoid modification
     products = mockProducts;
+    cart = mockCart;
   })
 
   describe('Test browseProductCatalog function', () => {
@@ -248,17 +251,15 @@ describe('Scenario 1 test', () => {
 
     test('Adding products when shoppingCart is not an array', () => {
         const selectedProducts = [{ id: 1, name: 'Product A', price: 10.99 }];
-        const shoppingCart = {}; // Invalid shoppingCart (not an array)
+        const shoppingCart = {};
         const updatedCart = addToCart(selectedProducts, shoppingCart);
-        // Expectation: Return value should match the original shoppingCart (should not modify it)
         expect(updatedCart).toEqual(shoppingCart);
     });
 
     test('Passing invalid or empty input parameters', () => {
-        const selectedProducts = null; // Invalid selectedProducts (null)
-        const shoppingCart = []; // Valid shoppingCart
+        const selectedProducts = null;
+        const shoppingCart = []; 
         const updatedCart = addToCart(selectedProducts, shoppingCart);
-        // Expectation: Return value should match the original shoppingCart (should not modify it)
         expect(updatedCart).toEqual(shoppingCart);
     });
   })

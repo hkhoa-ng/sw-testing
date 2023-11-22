@@ -68,6 +68,9 @@ export function addToCart(selectedProducts, shoppingCart) {
   // Iterate over each product to add them to the shopping cart
   productsToAdd.forEach((product) => {
     const productId = get(product, 'id');
+    if (!productId || !product.name || !product.price){
+      return
+    }
     const existingItem = shoppingCart.find((item) => get(item, 'id') === productId);
 
     if (existingItem) {
