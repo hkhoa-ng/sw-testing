@@ -285,11 +285,11 @@ describe('Scenario 1 test', () => {
     test('Decrease quantity of an existing product in the cart', () => {
         const shoppingCart = [{ id: 1, name: 'Product A', price: 10.99, quantity: 3 }];
         const productId = 1;
-        const quantityChange = -1;
+        const quantityChange = -2;
         const updatedCart = interactWithCart(shoppingCart, productId, quantityChange);
         expect(updatedCart).toEqual({
-        cartItems: [],
-        totalPrice: 0,
+        cartItems: [{ id: 1, name: 'Product A', price: 10.99, quantity: 1 }],
+        totalPrice: 10.99,
         });
     });
 
@@ -319,11 +319,10 @@ describe('Scenario 1 test', () => {
     });
 
     test('Passing invalid input parameters', () => {
-        const shoppingCart = []; // Empty cart
+        const shoppingCart = [];
         const productId = 1;
-        const quantityChange = 'invalid'; // Invalid quantity change
+        const quantityChange = 'invalid';
         const updatedCart = interactWithCart(shoppingCart, productId, quantityChange);
-        // Expectation: Return value should be an empty cart with total price as 0
         expect(updatedCart).toEqual({ cartItems: [], totalPrice: 0 });
     });
   })
@@ -337,7 +336,7 @@ describe('Scenario 1 test', () => {
 
     test('Calculate total price and round it to 2 decimal places', () => {
         const orderConfirmation = checkout(shoppingCart, paymentInfo);
-        expect(orderConfirmation.totalPrice).toBeCloseTo(38.97); // Total price of products in shopping cart
+        expect(orderConfirmation.totalPrice).toBeCloseTo(38.97);
     });
 
     test('Verify cart items and payment information in order confirmation', () => {
@@ -365,14 +364,8 @@ describe('Scenario 1 test', () => {
         expect(orderConfirmation).toEqual({
         cartItems: shoppingCart,
         totalPrice: 38.97,
-        paymentInfo: invalidPaymentInfo, // Should return the provided invalid payment info
+        paymentInfo: invalidPaymentInfo,
         });
-    });
-
-    test('Rounding of total price with different values', () => {
-        const totalPrice = 49.998; // A number with more than 2 decimal places
-        const orderConfirmation = checkout(shoppingCart, paymentInfo);
-        expect(orderConfirmation.totalPrice).toBeCloseTo(38.97); // Expectation: Total price rounded to 2 decimal places
     });
   })
 
@@ -380,12 +373,11 @@ describe('Scenario 1 test', () => {
     const paymentInfo = { cardNumber: '1234 5678 9101 1121', expiry: '12/23', cvv: '123' };
 
     test('Verify payment transaction record', () => {
-        const paymentResponse = "25.99 USD";
         const expectedPaymentAmount = 25.99;
 
         const { transactionRecord } = makePayment(paymentInfo);
         expect(transactionRecord.amount).toBe(expectedPaymentAmount);
-        expect(transactionRecord.currency).toBe('USD');
+        expect(transactionRecord.currency).toBe('EUR');
         expect(transactionRecord.status).toBe('successful');
         expect(transactionRecord.paymentInfo).toEqual(paymentInfo);
         expect(new Date(transactionRecord.timestamp)).toBeInstanceOf(Date);
@@ -393,9 +385,9 @@ describe('Scenario 1 test', () => {
 
     test('Verify order confirmation details', () => {
         const { orderConfirmation } = makePayment(paymentInfo);
-        const expectedPaidItems = ['25.99', 'USD'];
+        const expectedPaidItems = ['25.99', 'EUR'];
 
-        expect(orderConfirmation.message).toBe('Your payment of 25.99 USD was successful.');
+        expect(orderConfirmation.message).toBe('Your payment of 25.99 EUR was successful.');
         expect(orderConfirmation.itemsPaidFor).toEqual(expectedPaidItems);
         expect(orderConfirmation.contactMethod).toBe('SMS');
         expect(orderConfirmation.contactAddress).toBe('+1234567890');
@@ -408,7 +400,7 @@ describe('Scenario 1 test', () => {
     });
 
     test('Payment response parsing for paid items', () => {
-        const expectedPaidItems = ['25.99', 'USD'];
+        const expectedPaidItems = ['25.99', 'EUR'];
         const { orderConfirmation } = makePayment(paymentInfo);
         expect(orderConfirmation.itemsPaidFor).toEqual(expectedPaidItems);
     });

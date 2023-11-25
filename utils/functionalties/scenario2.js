@@ -2,7 +2,6 @@ import get from "../get";
 import eq from "../eq";
 import compact from "../compact";
 import add from "../add";
-import toNumber from "../toNumber";
 import capitalize from "../capitalize";
 import isDate from "../isDate";
 import isArrayLikeObject from "../isArrayLikeObject";
@@ -27,6 +26,13 @@ export function producerLogin(email, password, producerCredentials) {
 
 // Step 2: Producer adds new product
 export function addNewProduct(productInfo, productsDatabase) {
+  if (!productInfo.name || !productInfo.category || !productInfo.price){
+    return {
+      success: false,
+      message: 'Missing required fields.',
+      productsDatabase
+    }
+  }
   const { name, description, category, price, ...otherAttributes } = productInfo;
   const newProduct = {
     name: capitalize(name),
@@ -75,9 +81,6 @@ export function validateProductInfo(productInfo) {
     if (typeof price !== 'number' || isNaN(price) || price <= 0) {
       return { valid: false, message: 'Price should be a valid number greater than 0.' };
     }
-    if (!isDate(productInfo.createdDate)) {
-      return { valid: false, message: 'Invalid createdDate format.' };
-    }
 
     if (!isArrayLikeObject(category)) {
       return { valid: false, message: 'Categories should be an array-like object.' };
@@ -91,13 +94,9 @@ export function validateProductInfo(productInfo) {
 }
 
 // Step 5: Product Addition (Back-End)
-export function addProductToDatabase(productDetails) {
-  const db = {
-    insert: (tableName, data) => {
-      console.log(`Adding product to table ${tableName}:`, data);
-    },
-  };
-    productDetails.quantity = add(productDetails.quantity, 1);
+export function addProductToDatabase(productDetails, db) {
+    existingProductQuantity = 1
+    productDetails.quantity = add(productDetails.quantity, existingProductQuantity);
     db.insert('products', productDetails);
 };
 
