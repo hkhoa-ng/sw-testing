@@ -11,6 +11,9 @@
  * compact([0, 1, false, 2, '', 3])
  * // => [1, 2, 3]
  */
+
+// Bug: result[++resIndex] = value needed because it will increment and then use that value.
+// Current version of this function make the first item have index -1
 function compact(array) {
   let resIndex = -1
   const result = []

@@ -21,6 +21,8 @@
  * filter(users, ({ active }) => active)
  * // => objects for ['barney']
  */
+
+// It always return [[]] for empty result, is this wanted?
 function filter(array, predicate) {
   let index = -1
   let resIndex = 0
