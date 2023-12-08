@@ -54,7 +54,7 @@ export function addNewProduct(productInfo, productsDatabase) {
 
 // Step 3: Request transmission
 export function requestTransmission(productData) {
-  if (validateProductInfo(productData)) {
+  if (validateProductInfo(productData).valid) {
     return { success: true, message: "Product added to the database." };
   }
   return { success: false, message: "Invalid product data." };

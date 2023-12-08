@@ -105,8 +105,8 @@ describe('Scenario 2 test', () => {
             const productData = {
                 name: 'Banana',
                 description: 'A tropical fruit',
-                category: 'Fruit',
-                price: '1.25',
+                category: ['Fruit'],
+                price: 1.25,
             };
 
             const result = requestTransmission(productData);
