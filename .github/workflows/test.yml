@@ -11,14 +11,10 @@ on:
 
 jobs:
   test:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
@@ -30,10 +26,12 @@ jobs:
       run: npm install
     - run: npm test
     - name: Run coveralls
+      if: success() || failure()
       env:
         COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
       run: npm run test:coveralls
     - name: Coveralls Parallel
+      if: success() || failure()
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -41,6 +39,7 @@ jobs:
 
   finish:
     needs: test
+    if: success() || failure()
     runs-on: ubuntu-latest
     steps:
     - name: Coveralls Finished
