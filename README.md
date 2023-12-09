@@ -10,7 +10,7 @@ This is the repository for the course COMP.SE.200 Software Testing project.
 2. Install the dependencies with
 
 ```
-npm ci
+npm install
 ```
 
 3. To run the test
@@ -18,3 +18,13 @@ npm ci
 ```
 npm run test
 ```
+
+4. To run the code coverage report with Jest
+
+```
+npm run test:coverage
+```
+
+## Code coverage dashboard
+
+The code coverage dashboard for this repository is available at [coveralls.io](https://coveralls.io/github/hkhoa-ng/sw-testing?branch=main), or by clicking on the badge of the `README.md` file.
